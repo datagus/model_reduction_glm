@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="./favicon.ico" />
+    <!-- Preload is necessary because we show these images when we disconnect from the server,
+    but at that point we cannot load these images from the server -->
+    <link rel="preload" href="./assets/gradient-yHQUC_QB.png" as="image" />
+    <link rel="preload" href="./assets/noise-60BoTA8O.png" as="image" />
+    <!-- Preload the fonts -->
+    <link rel="preload" href="./assets/Lora-VariableFont_wght-B2ootaw-.ttf" as="font" crossorigin="anonymous" />
+    <link rel="preload" href="./assets/PTSans-Regular-CxL0S8W7.ttf" as="font" crossorigin="anonymous" />
+    <link rel="preload" href="./assets/PTSans-Bold-D9fedIX3.ttf" as="font" crossorigin="anonymous" />
+    <link rel="preload" href="./assets/FiraMono-Regular-BTCkDNvf.ttf" as="font" crossorigin="anonymous" />
+    <link rel="preload" href="./assets/FiraMono-Medium-DU3aDxX5.ttf" as="font" crossorigin="anonymous" />
+    <link rel="preload" href="./assets/FiraMono-Bold-CLVRCuM9.ttf" as="font" crossorigin="anonymous" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <meta name="description" content="a marimo app" />
+    <link rel="apple-touch-icon" href="./apple-touch-icon.png" />
+    <link rel="manifest" href="./manifest.json" />
+
+    <script data-marimo="true">
+      function __resizeIframe(obj) {
+        const scrollbarHeight = 20; // Max between windows, mac, and linux
+
+        function setHeight() {
+          // Guard against race condition where iframe isn't ready
+          if (!obj.contentWindow?.document?.documentElement) {
+            return;
+          }
+          const element = obj.contentWindow.document.documentElement;
+          // If there is no vertical scrollbar, we don't need to resize the iframe
+          if (element.scrollHeight === element.clientHeight) {
+            return;
+          }
+
+          // Create a new height that includes the scrollbar height if it's visible
+          const hasHorizontalScrollbar = element.scrollWidth > element.clientWidth;
+          const newHeight = element.scrollHeight + (hasHorizontalScrollbar ? scrollbarHeight : 0);
+
+          // Only update the height if it's different from the current height
+          if (obj.style.height !== `${newHeight}px`) {
+            obj.style.height = `${newHeight}px`;
+          }
+        }
+
+        // Resize the iframe to the height of the content and bottom scrollbar height
+        setHeight();
+
+        // Resize the iframe when the content changes
+        const resizeObserver = new ResizeObserver((_entries) => {
+          setHeight();
+        });
+        // Only observe if iframe content is ready
+        if (obj.contentWindow?.document?.body) {
+          resizeObserver.observe(obj.contentWindow.document.body);
+        }
+      }
+    </script>
+    <marimo-filename hidden>notebook.py</marimo-filename>
+    <!-- TODO(Trevor): Legacy, required by VS Code plugin. Remove when plugin is updated (see marimo/server/_templates/template.py) -->
+    <marimo-version data-version="{{ version }}" hidden></marimo-version>
+    <marimo-user-config data-config="{{ user_config }}" hidden></marimo-user-config>
+    <marimo-server-token data-token="{{ server_token }}" hidden></marimo-server-token>
+    <!-- /TODO -->
+    <title>Model_Reduction</title>
+    <script type="module" crossorigin src="./assets/index-3OIHLLq_.js"></script>
+    <link rel="modulepreload" crossorigin href="./assets/preload-helper-g1IWzEZ-.js">
+    <link rel="modulepreload" crossorigin href="./assets/chunk-LvLJmgfZ.js">
+    <link rel="modulepreload" crossorigin href="./assets/react-XTZdWHwa.js">
+    <link rel="modulepreload" crossorigin href="./assets/compiler-runtime-QczY1yfQ.js">
+    <link rel="modulepreload" crossorigin href="./assets/useEventListener-4mpeqPxW.js">
+    <link rel="modulepreload" crossorigin href="./assets/react-dom-BZDtXk6t.js">
+    <link rel="modulepreload" crossorigin href="./assets/jsx-runtime-DUsrKwmN.js">
+    <link rel="modulepreload" crossorigin href="./assets/Combination-D2HqSOvH.js">
+    <link rel="modulepreload" crossorigin href="./assets/clsx-FpJB9huX.js">
+    <link rel="modulepreload" crossorigin href="./assets/cn-Cs2e4A8T.js">
+    <link rel="modulepreload" crossorigin href="./assets/menu-items-B57SjdWM.js">
+    <link rel="modulepreload" crossorigin href="./assets/hotkeys-Dh4gy4JD.js">
+    <link rel="modulepreload" crossorigin href="./assets/button-D8mnDDLX.js">
+    <link rel="modulepreload" crossorigin href="./assets/dist-Dj-O1Spr.js">
+    <link rel="modulepreload" crossorigin href="./assets/createLucideIcon-BJ2I6csQ.js">
+    <link rel="modulepreload" crossorigin href="./assets/check-CWbw3kKW.js">
+    <link rel="modulepreload" crossorigin href="./assets/select-CgZgQ5hV.js">
+    <link rel="modulepreload" crossorigin href="./assets/multi-map-D3NvLiI9.js">
+    <link rel="modulepreload" crossorigin href="./assets/chevron-right-B_qBg_RU.js">
+    <link rel="modulepreload" crossorigin href="./assets/dropdown-menu-Ciqx4yT-.js">
+    <link rel="modulepreload" crossorigin href="./assets/tooltip-DqNvr2Rw.js">
+    <link rel="modulepreload" crossorigin href="./assets/_Uint8Array-BGESiCQL.js">
+    <link rel="modulepreload" crossorigin href="./assets/_getTag-BWqNuuwU.js">
+    <link rel="modulepreload" crossorigin href="./assets/_baseIsEqual-C8v2yRqO.js">
+    <link rel="modulepreload" crossorigin href="./assets/jotai-D74Ef_p1.js">
+    <link rel="modulepreload" crossorigin href="./assets/invariant-Amh6wt4N.js">
+    <link rel="modulepreload" crossorigin href="./assets/isArrayLikeObject-BkJc8lDE.js">
+    <link rel="modulepreload" crossorigin href="./assets/merge-5YNOh9ZD.js">
+    <link rel="modulepreload" crossorigin href="./assets/zod-BBqism5D.js">
+    <link rel="modulepreload" crossorigin href="./assets/utils-x9KlwLm7.js">
+    <link rel="modulepreload" crossorigin href="./assets/requests-THIDPq-F.js">
+    <link rel="modulepreload" crossorigin href="./assets/once-BxRirs3K.js">
+    <link rel="modulepreload" crossorigin href="./assets/toDate-Y5T6FHPx.js">
+    <link rel="modulepreload" crossorigin href="./assets/isSymbol-BGkTcW3U.js">
+    <link rel="modulepreload" crossorigin href="./assets/toString-DlRqgfqz.js">
+    <link rel="modulepreload" crossorigin href="./assets/_baseSlice-BoaxdS7L.js">
+    <link rel="modulepreload" crossorigin href="./assets/_hasUnicode-CNlKPr15.js">
+    <link rel="modulepreload" crossorigin href="./assets/useLifecycle-8fgb5Nue.js">
+    <link rel="modulepreload" crossorigin href="./assets/capitalize-L9-XHPtm.js">
+    <link rel="modulepreload" crossorigin href="./assets/ai-model-dropdown-CO52rzQt.js">
+    <link rel="modulepreload" crossorigin href="./assets/badge-Cm0WUI-_.js">
+    <link rel="modulepreload" crossorigin href="./assets/use-toast-DKTyV2AR.js">
+    <link rel="modulepreload" crossorigin href="./assets/constants-BmIIVBf_.js">
+    <link rel="modulepreload" crossorigin href="./assets/Deferred-9HYzcD3r.js">
+    <link rel="modulepreload" crossorigin href="./assets/config-CbG7e0K6.js">
+    <link rel="modulepreload" crossorigin href="./assets/uuid-B8w6pjWV.js">
+    <link rel="modulepreload" crossorigin href="./assets/DeferredRequestRegistry-DfLQSvoS.js">
+    <link rel="modulepreload" crossorigin href="./assets/connection-B11rCPnY.js">
+    <link rel="modulepreload" crossorigin href="./assets/useNonce-D8CLFIrY.js">
+    <link rel="modulepreload" crossorigin href="./assets/capabilities-Bdlrhekp.js">
+    <link rel="modulepreload" crossorigin href="./assets/createReducer-VgoBNe3M.js">
+    <link rel="modulepreload" crossorigin href="./assets/dist-C3a_7WFa.js">
+    <link rel="modulepreload" crossorigin href="./assets/dist-0z0sEYV-.js">
+    <link rel="modulepreload" crossorigin href="./assets/dist-BzfTz_Dx.js">
+    <link rel="modulepreload" crossorigin href="./assets/dist-DmruaXMM.js">
+    <link rel="modulepreload" crossorigin href="./assets/dist-DU0YrNRK.js">
+    <link rel="modulepreload" crossorigin href="./assets/dist-_bGPtAsk.js">
+    <link rel="modulepreload" crossorigin href="./assets/dist-DsSBESho.js">
+    <link rel="modulepreload" crossorigin href="./assets/dist-B2TjmP7E.js">
+    <link rel="modulepreload" crossorigin href="./assets/dist-BzDb7E9f.js">
+    <link rel="modulepreload" crossorigin href="./assets/stex-C4ZxI0N3.js">
+    <link rel="modulepreload" crossorigin href="./assets/cjs-Ba5CQnxe.js">
+    <link rel="modulepreload" crossorigin href="./assets/_arrayReduce-DdxhySYh.js">
+    <link rel="modulepreload" crossorigin href="./assets/type-kFt-n-jZ.js">
+    <link rel="modulepreload" crossorigin href="./assets/_baseProperty-D0ckTA0L.js">
+    <link rel="modulepreload" crossorigin href="./assets/toNumber-GB_lFVaq.js">
+    <link rel="modulepreload" crossorigin href="./assets/now-CAWn5i9V.js">
+    <link rel="modulepreload" crossorigin href="./assets/debounce-Bgq-wc7M.js">
+    <link rel="modulepreload" crossorigin href="./assets/toInteger-Cl1doThW.js">
+    <link rel="modulepreload" crossorigin href="./assets/main-CC_mbgxK.js">
+    <link rel="modulepreload" crossorigin href="./assets/cells-DoKM12vd.js">
+    <link rel="modulepreload" crossorigin href="./assets/kbd-EdFdwHEs.js">
+    <link rel="modulepreload" crossorigin href="./assets/renderShortcut-CLenKJO6.js">
+    <link rel="modulepreload" crossorigin href="./assets/useEvent-l9BzRqpK.js">
+    <link rel="modulepreload" crossorigin href="./assets/useDeleteCell-BDBSmjLV.js">
+    <link rel="modulepreload" crossorigin href="./assets/lazy-Cbg8zRvU.js">
+    <link rel="modulepreload" crossorigin href="./assets/defaultLocale-8c1ixjJ_.js">
+    <link rel="modulepreload" crossorigin href="./assets/precisionRound-CQhbsDNz.js">
+    <link rel="modulepreload" crossorigin href="./assets/defaultLocale-BECdiY5x.js">
+    <link rel="modulepreload" crossorigin href="./assets/vega-loader.browser-DZ31-605.js">
+    <link rel="modulepreload" crossorigin href="./assets/tooltip-CSAGVmjx.js">
+    <link rel="modulepreload" crossorigin href="./assets/ErrorBoundary-6EjkHrSV.js">
+    <link rel="modulepreload" crossorigin href="./assets/alert-dialog-D9SwG8oA.js">
+    <link rel="modulepreload" crossorigin href="./assets/dialog-BPIq0Dmw.js">
+    <link rel="modulepreload" crossorigin href="./assets/useDebounce-C9S6xmGh.js">
+    <link rel="modulepreload" crossorigin href="./assets/numbers-BigybruE.js">
+    <link rel="modulepreload" crossorigin href="./assets/SSRProvider-DlZbKHsu.js">
+    <link rel="modulepreload" crossorigin href="./assets/context-CO64Gasq.js">
+    <link rel="modulepreload" crossorigin href="./assets/useNumberFormatter-B5HAJDUq.js">
+    <link rel="modulepreload" crossorigin href="./assets/usePress-DHxqjtDm.js">
+    <link rel="modulepreload" crossorigin href="./assets/input-CVoLDDk-.js">
+    <link rel="modulepreload" crossorigin href="./assets/ImperativeModal-ameyIrhc.js">
+    <link rel="modulepreload" crossorigin href="./assets/cell-link-BiAu_8pk.js">
+    <link rel="modulepreload" crossorigin href="./assets/alert-D5BMn3Et.js">
+    <link rel="modulepreload" crossorigin href="./assets/links-Iv0WhyKW.js">
+    <link rel="modulepreload" crossorigin href="./assets/state-i7G4J1VS.js">
+    <link rel="modulepreload" crossorigin href="./assets/MarimoErrorOutput-Bh7Bgl2Z.js">
+    <link rel="modulepreload" crossorigin href="./assets/copy-BS3uwoaq.js">
+    <link rel="modulepreload" crossorigin href="./assets/copy-DhmkXAPp.js">
+    <link rel="modulepreload" crossorigin href="./assets/copy-icon-Lyk2_Z8G.js">
+    <link rel="modulepreload" crossorigin href="./assets/spinner-DpaQpaiI.js">
+    <link rel="modulepreload" crossorigin href="./assets/dist-D1pae9A2.js">
+    <link rel="modulepreload" crossorigin href="./assets/focus-CyxSol0W.js">
+    <link rel="modulepreload" crossorigin href="./assets/popover-DZBXSGEz.js">
+    <link rel="modulepreload" crossorigin href="./assets/useRunCells-DT1En-Te.js">
+    <link rel="modulepreload" crossorigin href="./assets/mode-DKDAYLK9.js">
+    <link rel="modulepreload" crossorigin href="./assets/purify.es-hXMlfS4W.js">
+    <link rel="modulepreload" crossorigin href="./assets/RenderHTML-Dlz0Ew2i.js">
+    <link rel="modulepreload" crossorigin href="./assets/table-CesNYRF-.js">
+    <link rel="modulepreload" crossorigin href="./assets/tabs-BjAbB8w_.js">
+    <link rel="modulepreload" crossorigin href="./assets/add-missing-import-DV1FOw9w.js">
+    <link rel="modulepreload" crossorigin href="./assets/useAsyncData-_-DLduEH.js">
+    <link rel="modulepreload" crossorigin href="./assets/useIframeCapabilities-r0LQMxAQ.js">
+    <link rel="modulepreload" crossorigin href="./assets/LazyAnyLanguageCodeMirror-C7KtNlRp.js">
+    <link rel="modulepreload" crossorigin href="./assets/error-banner-C9tkg1MX.js">
+    <link rel="modulepreload" crossorigin href="./assets/formats-C3exma5i.js">
+    <link rel="modulepreload" crossorigin href="./assets/useTheme-DpA-8Qyy.js">
+    <link rel="modulepreload" crossorigin href="./assets/en-US-Lc4gASCJ.js">
+    <link rel="modulepreload" crossorigin href="./assets/isValid-Cd_L_2Pm.js">
+    <link rel="modulepreload" crossorigin href="./assets/maps-D4abje2p.js">
+    <link rel="modulepreload" crossorigin href="./assets/shim-D-ElLTBO.js">
+    <link rel="modulepreload" crossorigin href="./assets/download-CCvBQ7qL.js">
+    <link rel="modulepreload" crossorigin href="./assets/extends-C2lJEiP_.js">
+    <link rel="modulepreload" crossorigin href="./assets/emotion-is-prop-valid.esm-c4A1huxA.js">
+    <link rel="modulepreload" crossorigin href="./assets/useDateFormatter-BMdQ9MI_.js">
+    <link rel="modulepreload" crossorigin href="./assets/katex-BmfUoCWW.js">
+    <link rel="modulepreload" crossorigin href="./assets/marked.esm-idL59iHw.js">
+    <link rel="modulepreload" crossorigin href="./assets/chunk-T7OEMACY-CdGEwedE.js">
+    <link rel="modulepreload" crossorigin href="./assets/range-Bbli-TEL.js">
+    <link rel="modulepreload" crossorigin href="./assets/table-kHJ0xpFt.js">
+    <link rel="modulepreload" crossorigin href="./assets/Output-DxdWGPFi.js">
+    <link rel="modulepreload" crossorigin href="./assets/name-cell-input-C6ZYU6mN.js">
+    <link rel="modulepreload" crossorigin href="./assets/useHotkey-B0ylhc2m.js">
+    <link rel="modulepreload" crossorigin href="./assets/dist-CqHWOZu2.js">
+    <link rel="modulepreload" crossorigin href="./assets/dist-BcLYYUSi.js">
+    <link rel="modulepreload" crossorigin href="./assets/dist-BVXr6b5T.js">
+    <link rel="modulepreload" crossorigin href="./assets/dist-BrEX5EQl.js">
+    <link rel="modulepreload" crossorigin href="./assets/dist-CalRK9ms.js">
+    <link rel="modulepreload" crossorigin href="./assets/dist-Cc4T7UUX.js">
+    <link rel="modulepreload" crossorigin href="./assets/dist-D3MC5WiF.js">
+    <link rel="modulepreload" crossorigin href="./assets/dist-DgaCIZAa.js">
+    <link rel="modulepreload" crossorigin href="./assets/dist-rqHtY98i.js">
+    <link rel="modulepreload" crossorigin href="./assets/dist-tj-jaP-y.js">
+    <link rel="modulepreload" crossorigin href="./assets/dist-w7c0BKrD.js">
+    <link rel="modulepreload" crossorigin href="./assets/dist-CCZcRJI9.js">
+    <link rel="modulepreload" crossorigin href="./assets/dist-CrDb6akR.js">
+    <link rel="modulepreload" crossorigin href="./assets/apl-BQt6lLuE.js">
+    <link rel="modulepreload" crossorigin href="./assets/asciiarmor-BjX7bs0j.js">
+    <link rel="modulepreload" crossorigin href="./assets/asn1-xn1MtyoW.js">
+    <link rel="modulepreload" crossorigin href="./assets/brainfuck-BjO-UY1i.js">
+    <link rel="modulepreload" crossorigin href="./assets/clike-DW9tQWfF.js">
+    <link rel="modulepreload" crossorigin href="./assets/clojure-BSW96HRx.js">
+    <link rel="modulepreload" crossorigin href="./assets/cmake-C7UlMfz3.js">
+    <link rel="modulepreload" crossorigin href="./assets/cobol-CyWIev3Y.js">
+    <link rel="modulepreload" crossorigin href="./assets/coffeescript-DTvziYTK.js">
+    <link rel="modulepreload" crossorigin href="./assets/commonlisp-yMdkdGMi.js">
+    <link rel="modulepreload" crossorigin href="./assets/crystal-BGnoSp3z.js">
+    <link rel="modulepreload" crossorigin href="./assets/css-D7fWzevp.js">
+    <link rel="modulepreload" crossorigin href="./assets/cypher-Cr1dl0Qf.js">
+    <link rel="modulepreload" crossorigin href="./assets/d-C2bS5bA6.js">
+    <link rel="modulepreload" crossorigin href="./assets/diff-B2mHQyn6.js">
+    <link rel="modulepreload" crossorigin href="./assets/dtd-Cy-lUE7p.js">
+    <link rel="modulepreload" crossorigin href="./assets/dylan-mm60grwk.js">
+    <link rel="modulepreload" crossorigin href="./assets/ecl-Cqi05Wy1.js">
+    <link rel="modulepreload" crossorigin href="./assets/eiffel-FkvfLQq7.js">
+    <link rel="modulepreload" crossorigin href="./assets/elm-Da5txHw0.js">
+    <link rel="modulepreload" crossorigin href="./assets/erlang-CdnCEH5x.js">
+    <link rel="modulepreload" crossorigin href="./assets/simple-mode-B185hCuE.js">
+    <link rel="modulepreload" crossorigin href="./assets/factor-CamlR8EJ.js">
+    <link rel="modulepreload" crossorigin href="./assets/forth-UcMX0m31.js">
+    <link rel="modulepreload" crossorigin href="./assets/fortran-DZ_vNVsP.js">
+    <link rel="modulepreload" crossorigin href="./assets/gas-CM88o6Zj.js">
+    <link rel="modulepreload" crossorigin href="./assets/gherkin-BhrpTeN9.js">
+    <link rel="modulepreload" crossorigin href="./assets/groovy-BFju68Wx.js">
+    <link rel="modulepreload" crossorigin href="./assets/haskell-CrWHY4et.js">
+    <link rel="modulepreload" crossorigin href="./assets/haxe-1eKW-tbO.js">
+    <link rel="modulepreload" crossorigin href="./assets/idl-Do4AwvU2.js">
+    <link rel="modulepreload" crossorigin href="./assets/javascript-CTXZKRYd.js">
+    <link rel="modulepreload" crossorigin href="./assets/julia-BRynwHI4.js">
+    <link rel="modulepreload" crossorigin href="./assets/livescript-ZmIBNA-I.js">
+    <link rel="modulepreload" crossorigin href="./assets/lua-mUfZ-MRC.js">
+    <link rel="modulepreload" crossorigin href="./assets/mathematica-Dil5dTHO.js">
+    <link rel="modulepreload" crossorigin href="./assets/mbox-Dnkn9wSr.js">
+    <link rel="modulepreload" crossorigin href="./assets/mirc-auEWieOB.js">
+    <link rel="modulepreload" crossorigin href="./assets/mllike-xVJsauJ8.js">
+    <link rel="modulepreload" crossorigin href="./assets/modelica-B8kajVDm.js">
+    <link rel="modulepreload" crossorigin href="./assets/mscgen-Bsnta1jn.js">
+    <link rel="modulepreload" crossorigin href="./assets/mumps-CMw16b5q.js">
+    <link rel="modulepreload" crossorigin href="./assets/nsis-DwPdi8sw.js">
+    <link rel="modulepreload" crossorigin href="./assets/ntriples-O5lQxirn.js">
+    <link rel="modulepreload" crossorigin href="./assets/octave-CMfAar-E.js">
+    <link rel="modulepreload" crossorigin href="./assets/oz-CLRI9Qww.js">
+    <link rel="modulepreload" crossorigin href="./assets/pascal-D2M_3HBx.js">
+    <link rel="modulepreload" crossorigin href="./assets/perl-B8lV7aKt.js">
+    <link rel="modulepreload" crossorigin href="./assets/pig-Bima2bfE.js">
+    <link rel="modulepreload" crossorigin href="./assets/powershell-v_t41ydu.js">
+    <link rel="modulepreload" crossorigin href="./assets/properties-ChrStSby.js">
+    <link rel="modulepreload" crossorigin href="./assets/protobuf-Bin6kmlf.js">
+    <link rel="modulepreload" crossorigin href="./assets/pug-UWVdYLYW.js">
+    <link rel="modulepreload" crossorigin href="./assets/puppet-DYrtWvYn.js">
+    <link rel="modulepreload" crossorigin href="./assets/python-BuKrulde.js">
+    <link rel="modulepreload" crossorigin href="./assets/q-CrXUTiVN.js">
+    <link rel="modulepreload" crossorigin href="./assets/r-Bk2Tiso2.js">
+    <link rel="modulepreload" crossorigin href="./assets/rpm-CmmZphz3.js">
+    <link rel="modulepreload" crossorigin href="./assets/ruby-ElyOTVeQ.js">
+    <link rel="modulepreload" crossorigin href="./assets/sas-jE3ZlG0K.js">
+    <link rel="modulepreload" crossorigin href="./assets/scheme-CZF1tRbv.js">
+    <link rel="modulepreload" crossorigin href="./assets/shell-LqT3ZqMa.js">
+    <link rel="modulepreload" crossorigin href="./assets/sieve-y15yT7Pp.js">
+    <link rel="modulepreload" crossorigin href="./assets/smalltalk-pk5PvsMs.js">
+    <link rel="modulepreload" crossorigin href="./assets/sparql-DTZ_gfPQ.js">
+    <link rel="modulepreload" crossorigin href="./assets/stylus-CrGj0eNT.js">
+    <link rel="modulepreload" crossorigin href="./assets/swift-tt3PlBbI.js">
+    <link rel="modulepreload" crossorigin href="./assets/tcl-1P4b0GMJ.js">
+    <link rel="modulepreload" crossorigin href="./assets/textile-BHDIuMYh.js">
+    <link rel="modulepreload" crossorigin href="./assets/toml-C8qoqk_i.js">
+    <link rel="modulepreload" crossorigin href="./assets/troff-DMiF5Zmz.js">
+    <link rel="modulepreload" crossorigin href="./assets/ttcn-cfg-qLZtNU-E.js">
+    <link rel="modulepreload" crossorigin href="./assets/ttcn-BAUp3RZn.js">
+    <link rel="modulepreload" crossorigin href="./assets/turtle-BizIwmKv.js">
+    <link rel="modulepreload" crossorigin href="./assets/vb-Bn_uCxNL.js">
+    <link rel="modulepreload" crossorigin href="./assets/vbscript-BTKW8Atx.js">
+    <link rel="modulepreload" crossorigin href="./assets/velocity-CcB05fpi.js">
+    <link rel="modulepreload" crossorigin href="./assets/verilog-BWdtOJH8.js">
+    <link rel="modulepreload" crossorigin href="./assets/vhdl-CzFOaOHx.js">
+    <link rel="modulepreload" crossorigin href="./assets/webidl-DDEKCqSy.js">
+    <link rel="modulepreload" crossorigin href="./assets/xquery-BcF6ZhQP.js">
+    <link rel="modulepreload" crossorigin href="./assets/yacas-BARQAiXa.js">
+    <link rel="modulepreload" crossorigin href="./assets/z80-DO_Ep0iT.js">
+    <link rel="modulepreload" crossorigin href="./assets/esm-DnNh7vdQ.js">
+    <link rel="modulepreload" crossorigin href="./assets/objectWithoutPropertiesLoose-DDabolgJ.js">
+    <link rel="modulepreload" crossorigin href="./assets/esm-Crqxhl3F.js">
+    <link rel="modulepreload" crossorigin href="./assets/trash-Df8Wb7xS.js">
+    <link rel="modulepreload" crossorigin href="./assets/ConsoleOutput-D8ETq-cc.js">
+    <link rel="modulepreload" crossorigin href="./assets/icons-BgmgMjOV.js">
+    <link rel="modulepreload" crossorigin href="./assets/blob-LiDbeYko.js">
+    <link rel="modulepreload" crossorigin href="./assets/add-cell-with-ai-85tnyxYo.js">
+    <link rel="modulepreload" crossorigin href="./assets/chart-no-axes-column-BrQ3B3xc.js">
+    <link rel="modulepreload" crossorigin href="./assets/square-function-D5EEjILG.js">
+    <link rel="modulepreload" crossorigin href="./assets/spec-DpllSlJD.js">
+    <link rel="modulepreload" crossorigin href="./assets/useInstallPackage-BaAhpZlP.js">
+    <link rel="modulepreload" crossorigin href="./assets/column-preview-DGBk0umL.js">
+    <link rel="modulepreload" crossorigin href="./assets/useAddCell-DYfGo4T8.js">
+    <link rel="modulepreload" crossorigin href="./assets/toggle-PGHtwx2G.js">
+    <link rel="modulepreload" crossorigin href="./assets/api-CoLss8_O.js">
+    <link rel="modulepreload" crossorigin href="./assets/globals-oV9pRUSB.js">
+    <link rel="modulepreload" crossorigin href="./assets/share-DjbnD3WE.js">
+    <link rel="modulepreload" crossorigin href="./assets/memoize-DN0TMY36.js">
+    <link rel="modulepreload" crossorigin href="./assets/get-CyLJYAfP.js">
+    <link rel="modulepreload" crossorigin href="./assets/_baseSet-CKSmZC_I.js">
+    <link rel="modulepreload" crossorigin href="./assets/utilities.esm-DvrcU9Ky.js">
+    <link rel="modulepreload" crossorigin href="./assets/floating-outline-DmCT2Mvg.js">
+    <link rel="modulepreload" crossorigin href="./assets/eye-off-BUwXWtH0.js">
+    <link rel="modulepreload" crossorigin href="./assets/plus-CiGrWbgb.js">
+    <link rel="modulepreload" crossorigin href="./assets/readonly-python-code-CkaJ4Tks.js">
+    <link rel="modulepreload" crossorigin href="./assets/file-video-camera-BGBfFNDn.js">
+    <link rel="modulepreload" crossorigin href="./assets/file-text-O5IflCIn.js">
+    <link rel="modulepreload" crossorigin href="./assets/file-CqXxt3_J.js">
+    <link rel="modulepreload" crossorigin href="./assets/types-BMriRmf-.js">
+    <link rel="modulepreload" crossorigin href="./assets/label-4Nancvon.js">
+    <link rel="modulepreload" crossorigin href="./assets/textarea-BnZHy5Jt.js">
+    <link rel="modulepreload" crossorigin href="./assets/circle-x-Cc9X6U_B.js">
+    <link rel="modulepreload" crossorigin href="./assets/refresh-ccw-aU2rUkrI.js">
+    <link rel="modulepreload" crossorigin href="./assets/trash-2-Du5ITnDv.js">
+    <link rel="modulepreload" crossorigin href="./assets/form-600t_Civ.js">
+    <link rel="modulepreload" crossorigin href="./assets/field-Dov6YyOV.js">
+    <link rel="modulepreload" crossorigin href="./assets/switch-Ct8mUApv.js">
+    <link rel="modulepreload" crossorigin href="./assets/useBoolean-Dmwks1uh.js">
+    <link rel="modulepreload" crossorigin href="./assets/useDeepCompareMemoize-C8RdAYFq.js">
+    <link rel="modulepreload" crossorigin href="./assets/types-D0WVpW93.js">
+    <link rel="modulepreload" crossorigin href="./assets/prop-types-WJwGTMoZ.js">
+    <link rel="modulepreload" crossorigin href="./assets/es-DAmFxw3U.js">
+    <link rel="modulepreload" crossorigin href="./assets/VisuallyHidden-RqykLBKh.js">
+    <link rel="modulepreload" crossorigin href="./assets/_baseFlatten-rM2FaX4x.js">
+    <link rel="modulepreload" crossorigin href="./assets/hasIn-CE-pxQP-.js">
+    <link rel="modulepreload" crossorigin href="./assets/_basePickBy-LbasZ8ix.js">
+    <link rel="modulepreload" crossorigin href="./assets/pick-FbHfDtcJ.js">
+    <link rel="modulepreload" crossorigin href="./assets/send-LAFRRDPT.js">
+    <link rel="modulepreload" crossorigin href="./assets/code-xml-DdSOsi73.js">
+    <link rel="modulepreload" crossorigin href="./assets/download-Dmmu2U4a.js">
+    <link rel="modulepreload" crossorigin href="./assets/globe-vMZtva7z.js">
+    <link rel="modulepreload" crossorigin href="./assets/refresh-cw-BOc7UXm9.js">
+    <link rel="modulepreload" crossorigin href="./assets/settings-DznrHqbd.js">
+    <link rel="modulepreload" crossorigin href="./assets/square-DhlBDqyx.js">
+    <link rel="modulepreload" crossorigin href="./assets/triangle-alert-Bf1kg4xT.js">
+    <link rel="modulepreload" crossorigin href="./assets/dist-DL3W3q-2.js">
+    <link rel="modulepreload" crossorigin href="./assets/bundle.esm-C-9IAWQU.js">
+    <link rel="stylesheet" crossorigin href="./assets/cells-wU8qigWB.css">
+    <link rel="stylesheet" crossorigin href="./assets/Output-DUep6sC9.css">
+    <link rel="stylesheet" crossorigin href="./assets/ConsoleOutput-BFFTcC5Y.css">
+    <link rel="stylesheet" crossorigin href="./assets/index-CJU5NUvF.css">
+  <marimo-wasm hidden=""></marimo-wasm>
+    <script>
+        if (window.location.protocol === 'file:') {
+            alert('Warning: This file must be served by an HTTP server to function correctly.');
+        }
+    </script>
+    
+    <style>
+        #save-button {
+            display: none !important;
+        }
+        #filename-input {
+            display: none !important;
+        }
+    </style>
+    <marimo-code hidden="">import%20marimo%0A%0A__generated_with%20%3D%20%220.18.4%22%0Aapp%20%3D%20marimo.App(width%3D%22medium%22%2C%20app_title%3D%22Model_Reduction%22)%0A%0A%0A%40app.cell%0Adef%20_()%3A%0A%20%20%20%20import%20marimo%20as%20mo%0A%20%20%20%20import%20pandas%20as%20pd%0A%20%20%20%20import%20altair%20as%20alt%0A%20%20%20%20import%20numpy%20as%20np%0A%0A%20%20%20%20from%20ucimlrepo%20import%20fetch_ucirepo%0A%20%20%20%20import%20statsmodels.api%20as%20sm%0A%20%20%20%20import%20statsmodels.formula.api%20as%20smf%0A%20%20%20%20from%20sklearn.model_selection%20import%20train_test_split%0A%20%20%20%20return%20alt%2C%20mo%2C%20pd%0A%0A%0A%40app.cell(hide_code%3DTrue)%0Adef%20_()%3A%0A%20%20%20%20%23mo.md(text%3D%22%23%23%20Data%20Fetching%22)%0A%20%20%20%20return%0A%0A%0A%40app.cell%0Adef%20_(mo)%3A%0A%20%20%20%20mo.md(%22%22%22%0A%20%20%20%20%23%20Model%20Reduction%0A%20%20%20%20%22%22%22)%0A%20%20%20%20return%0A%0A%0A%40app.cell%0Adef%20_(mo)%3A%0A%20%20%20%20mo.md(text%3D%22%22%22%0A%20%20%20%20%20%20%20%20The%20objective%20of%20this%20notebook%20application%20is%20to%20introduce%20students%20with%20model%20reduction%20using%20generalized%20linear%20models%0A%0A%20%20%20%20%20%20%20%20Data%20source%3A%20https%3A%2F%2Farchive.ics.uci.edu%2Fdataset%2F327%2Fphishing%2Bwebsites%0A%0A%0A%20%20%20%20%20%20%20%20Mohammad%2C%20R.%20%26%20McCluskey%2C%20L.%20(2012).%20Phishing%20Websites%20%5BDataset%5D.%20UCI%20Machine%20Learning%20Repository.%20https%3A%2F%2Fdoi.org%2F10.24432%2FC51W2X.%0A%20%20%20%20%20%20%20%20%22%22%22).callout(kind%3D%22info%22)%0A%20%20%20%20return%0A%0A%0A%40app.cell%0Adef%20_(mo%2C%20pd)%3A%0A%20%20%20%20%40mo.cache()%0A%20%20%20%20def%20fetch_pish_data()%3A%0A%20%20%20%20%20%20%20%20url%20%3D%20%22https%3A%2F%2Fraw.githubusercontent.com%2Fdatagus%2FASDA2025%2Fmain%2Fdatasets%2Fexercse_week9%2Fpishing.csv%22%0A%20%20%20%20%20%20%20%20pish%20%3D%20pd.read_csv(url%2C%20encoding%3D'latin-1')%0A%20%20%20%20%20%20%20%20return%20pish%0A%0A%20%20%20%20pish_df%20%3D%20fetch_pish_data()%0A%20%20%20%20return%20(pish_df%2C)%0A%0A%0A%40app.cell(hide_code%3DTrue)%0Adef%20_(mo)%3A%0A%20%20%20%20%23%201.%20creating%20the%20long%20description%20of%20the%20predictors%0A%20%20%20%20feature_long%20%3D%20%7B%0A%0A%20%20%20%20%20%20%20%20%22having_ip_address%22%3A%20mo.md(%22%22%22%20%0A%0A%20%20%20%20%23%23%23%20**IP%20Address%20in%20URL%20(Phishing%20Indicator)**%0A%20%20%20%20If%20an%20IP%20address%20is%20used%20instead%20of%20a%20domain%20name%20in%20the%20URL%20(e.g.%60http%3A%2F%2F125.98.3.123%2Ffake.html%60)%2C%20users%20can%20be%20confident%20that%20someone%20is%20likely%20trying%20to%20steal%20personal%20information.%20Sometimes%2C%20the%20IP%20address%20is%20written%20in%20hexadecimal%20form%2C%20for%20example%3A%20%20%0A%20%20%20%20%60http%3A%2F%2F0x58.0xCC.0xCA.0x62%2F2%2Fpaypal.ca%2Findex.html%60%0A%0A%20%20%20%20%23%23%23%20**Rule**%3Cbr%3E%20%0A%20%20%20%20**IF**%20domain%20contains%20IP%20address%20%E2%86%92%20**Phishing**%20%20%0A%20%20%20%20**Otherwise**%20%E2%86%92%20**Legitimate**%0A%0A%20%20%20%20%22%22%22)%2C%0A%0A%20%20%20%20%20%20%20%20%22url_length%22%3A%20mo.md(%22%22%22%0A%0A%20%20%20%20%23%23%20**Long%20URL%20to%20Hide%20the%20Suspicious%20Part**%0A%20%20%20%20Phishers%20can%20use%20long%20URL%20to%20hide%20the%20doubtful%20part%20in%20the%20address%20bar.%20For%20example%3A%0A%0A%20%20%20%20%60http%3A%2F%2Ffedermacedoadv.com.br%2F3f%2Faze%2Fab51e2e319e51502f416dbe46b773a5e%2F%3Fcmd%3D_home%26amp%3Bdispatch%3D11004d58f5b74f8dc1e7c2e8dd4105e811004d58f5b74f8dc1e7c2e8dd4105e8%40phishing.website.html%60%0A%0A%20%20%20%20To%20ensure%20accuracy%20of%20our%20study%2C%20we%20calculated%20the%20length%20of%20URLs%20in%20the%20dataset%20and%20produced%20an%20average%20URL%20length.%20The%20results%20showed%20that%20if%20the%20length%20of%20the%20URL%20is%20greater%20than%20or%20equal%2054%20characters%20then%20the%20URL%20classified%20as%20phishing.%20By%20reviewing%20our%20dataset%20we%20were%20able%20to%20find%201220%20URLs%20lengths%20equals%20to%2054%20or%20more%20which%20constitute%2048.8%25%20of%20the%20total%20dataset%20size.%0A%0A%20%20%20%20%23%23%23%20**Rule**%3A%0A%20%20%20%20**IF**%20URL%20length%20%3C%2054%20%E2%86%92%20**Legitimate**%20%3Cbr%3E%0A%20%20%20%20**ELSEIF**%20URL%20length%20%E2%89%A5%2054%20and%20%E2%89%A4%2075%20%E2%86%92%20**Suspicious**%3Cbr%3E%0A%20%20%20%20**Otherwise**%20%E2%86%92%20**Phishing**%0A%20%20%20%20%22%22%22)%2C%0A%0A%20%20%20%20%20%20%20%20%22shortining_service%22%3A%20mo.md(%22%22%22%0A%20%20%20%20%23%23%20**Using%20URL%20Shortening%20Services%20%E2%80%9CTinyURL%E2%80%9D**%0A%20%20%20%20URL%20shortening%20is%20a%20method%20on%20the%20%E2%80%9CWorld%20Wide%20Web%E2%80%9D%20in%20which%20a%20URL%20may%20be%20made%20considerably%20smaller%20in%20length%20and%20still%20lead%20to%20the%20required%20webpage.%20This%20is%20accomplished%20by%20means%20of%20an%20%E2%80%9CHTTP%20Redirect%E2%80%9D%20on%20a%20domain%20name%20that%20is%20short%2C%20which%20links%20to%20the%20webpage%20that%20has%20a%20long%20URL.%20For%20example%2C%20the%20URL%20%60http%3A%2F%2Fportal.hud.ac.uk%2F%60%20can%20be%20shortened%20to%20%60bit.ly%2F19DXSk4%60.%0A%0A%20%20%20%20%23%23%23%20Rule%3A%20%0A%20%20%20%20**IF**%20TinyURL%20%E2%86%92%20**Phishing**%20%3Cbr%3E%0A%20%20%20%20**ELSE**%20%E2%86%92%20Legitimate%0A%20%20%20%20%22%22%22)%2C%0A%0A%20%20%20%20%20%20%20%20%22having_at_symbol%22%3A%20mo.md(%22%22%22%0A%20%20%20%20%23%23%20**URL%E2%80%99s%20having%20%E2%80%9C%40%E2%80%9D%20Symbol**%0A%20%20%20%20Using%20%E2%80%9C%40%E2%80%9D%20symbol%20in%20the%20URL%20leads%20the%20browser%20to%20ignore%20everything%20preceding%20the%20%E2%80%9C%40%E2%80%9D%20symbol%20and%20the%20real%20address%20often%20follows%20the%20%E2%80%9C%40%E2%80%9D%20symbol.%0A%0A%20%20%20%20%23%23%23%20**Rule**%0A%20%20%20%20**IF**%20Url%20Having%20%40%20Symbol%20%E2%86%92%20**Phishing**%20%3Cbr%3E%0A%20%20%20%20**Otherwise**%20%E2%86%92%20**Legitimate**%0A%20%20%20%20%22%22%22)%2C%0A%0A%20%20%20%20%20%20%20%20%22double_slash_redirecting%22%3A%20mo.md(%22%22%22%0A%20%20%20%20%23%23%20**Redirecting%20using%20%E2%80%9C%2F%2F%E2%80%9D**%0A%20%20%20%20The%20existence%20of%20%E2%80%9C%2F%2F%E2%80%9D%20within%20the%20URL%20path%20means%20that%20the%20user%20will%20be%20redirected%20to%20another%20website.%20An%20example%20of%20such%20URL%E2%80%99s%20is%3A%20%60http%3A%2F%2Fwww.legitimate.com%2F%2Fhttp%3A%2F%2Fwww.phishing.com%60.%20We%20examin%20the%20location%20where%20the%20%E2%80%9C%2F%2F%E2%80%9D%20appears.%20We%20find%20that%20if%20the%20URL%20starts%20with%20%E2%80%9CHTTP%E2%80%9D%2C%20that%20means%20the%20%E2%80%9C%2F%2F%E2%80%9D%20should%20appear%20in%20the%20sixth%20position.%20However%2C%20if%20the%20URL%20employs%20%E2%80%9CHTTPS%E2%80%9D%20then%20the%20%E2%80%9C%2F%2F%E2%80%9D%20should%20appear%20in%20seventh%20position.%0A%0A%20%20%20%20%23%23%23%20**Rule**%20%0A%20%20%20%20**IF**%20The%20Position%20of%20the%20Last%20Occurrence%20of%20%22%2F%2F%22%20in%20the%20URL%20%3E%207%20%E2%86%92%20**Phishing**%20%3Cbr%3E%20%0A%20%20%20%20**Otherwise**%20%E2%86%92%20**Legitimate**%0A%20%20%20%20%22%22%22)%2C%0A%0A%20%20%20%20%20%20%20%20%22prefix_suffix%22%3A%20mo.md(%22%22%22%0A%20%20%20%20%23%23%20**Adding%20Prefix%20or%20Suffix%20Separated%20by%20(-)%20to%20the%20Domain**%0A%20%20%20%20The%20dash%20symbol%20is%20rarely%20used%20in%20legitimate%20URLs.%20Phishers%20tend%20to%20add%20prefixes%20or%20suffixes%20separated%20by%20(-)%20to%20the%20domain%20name%20so%20that%20users%20feel%20that%20they%20are%20dealing%20with%20a%20legitimate%20webpage.%20For%20example%20%60http%3A%2F%2Fwww.Confirme-paypal.com%2F%60%0A%0A%20%20%20%20%23%23%23%20**Rule**%0A%20%20%20%20**IF**%20Domain%20Name%20Part%20Includes%20(-)%20Symbol%20%E2%86%92%20**Phishing**%20%3Cbr%3E%0A%20%20%20%20**Otherwise**%20%E2%86%92%20**Legitimate**%0A%20%20%20%20%22%22%22)%2C%0A%0A%20%20%20%20%20%20%20%20%22having_sub_domain%22%3A%20mo.md(%22%22%22%0A%20%20%20%20%23%23%20**Sub%20Domain%20and%20Multi%20Sub%20Domains**%20%20%0A%20%20%20%20Let%20us%20assume%20we%20have%20the%20following%20link%3A%20%60http%3A%2F%2Fwww.hud.ac.uk%2Fstudents%2F%60.%20A%20domain%20name%20might%20include%20the%20country-code%20top-level%20domains%20(ccTLD)%2C%20which%20in%20our%20example%20is%20%E2%80%9Cuk%E2%80%9D.%20The%20%E2%80%9Cac%E2%80%9D%20part%20is%20shorthand%20for%20%E2%80%9Cacademic%E2%80%9D%2C%20the%20combined%20%E2%80%9Cac.uk%E2%80%9D%20is%20called%20a%20second-level%20domain%20(SLD)%20and%20%E2%80%9Chud%E2%80%9D%20is%20the%20actual%20name%20of%20the%20domain.%0A%0A%20%20%20%20To%20produce%20a%20rule%20for%20extracting%20this%20feature%2C%20we%20firstly%20have%20to%20omit%20the%20(www.)%20from%20the%20URL%20which%20is%20in%20fact%20a%20sub%20domain%20in%20itself.%20Then%2C%20we%20have%20to%20remove%20the%20(ccTLD)%20if%20it%20exists.%20Finally%2C%20we%20count%20the%20remaining%20dots.%20If%20the%20number%20of%20dots%20is%20greater%20than%20one%2C%20then%20the%20URL%20is%20classified%20as%20%E2%80%9CSuspicious%E2%80%9D%20since%20it%20has%20one%20sub%20domain.%20However%2C%20if%20the%20dots%20are%20greater%20than%20two%2C%20it%20is%20classified%20as%20%E2%80%9CPhishing%E2%80%9D%20since%20it%20will%20have%20multiple%20sub%20domains.%20Otherwise%2C%20if%20the%20URL%20has%20no%20sub%20domains%2C%20we%20will%20assign%20%E2%80%9CLegitimate%E2%80%9D%20to%20the%20feature.%0A%0A%20%20%20%20%23%23%23%20**Rule**%0A%20%20%20%20**IF**%20Dots%20In%20Domain%20Part%20%3D%201%20%E2%86%92%20**Legitimate**%20%3Cbr%3E%0A%20%20%20%20**ELSEIF**%20Dots%20In%20Domain%20Part%20%3D%202%20%E2%86%92%20**Suspicious**%20%3Cbr%3E%0A%20%20%20%20**Otherwise**%20%E2%86%92%20**Phishing**%0A%20%20%20%20%22%22%22)%2C%0A%0A%20%20%20%20%20%20%20%20%22sslfinal_state%22%3A%20mo.md(%22%22%22%0A%20%20%20%20%23%23%20**HTTPS%20(Hyper%20Text%20Transfer%20Protocol%20with%20Secure%20Sockets%20Layer)**%20%20%0A%20%20%20%20Let%20us%20assume%20we%20have%20the%20following%20link%3A%20%60http%3A%2F%2Fwww.hud.ac.uk%2Fstudents%2F%60.%20A%20domain%20name%20might%20include%20the%20country-code%20top-level%20The%20existence%20of%20HTTPS%20is%20very%20important%20in%20giving%20the%20impression%20of%20website%20legitimacy%2C%20but%20this%20is%20clearly%20not%20enough.%20The%20authors%20in%20(Mohammad%2C%20Thabtah%20and%20McCluskey%202012)%20(Mohammad%2C%20Thabtah%20and%20McCluskey%202013)%20suggest%20checking%20the%20certificate%20assigned%20with%20HTTPS%20including%20the%20extent%20of%20the%20trust%20certificate%20issuer%2C%20and%20the%20certificate%20age.%20Certificate%20Authorities%20that%20are%20consistently%20listed%20among%20the%20top%20trustworthy%20names%20include%3A%20%E2%80%9CGeoTrust%2C%20GoDaddy%2C%20Network%20Solutions%2C%20Thawte%2C%20Comodo%2C%20Doster%20and%20VeriSign%E2%80%9D.%20Furthermore%2C%20by%20testing%20out%20our%20datasets%2C%20we%20find%20that%20the%20minimum%20age%20of%20a%20reputable%20certificate%20is%20two%20years.%0A%0A%20%20%20%20%23%23%23%20**Rule**%0A%20%20%20%20**IF**%20Use%20https%20and%20Issuer%20Is%20Trusted%20%26and%20Age%20of%20Certificate%E2%89%A5%201%20Years%20%E2%86%92%20**Legitimate**%20%3Cbr%3E%0A%20%20%20%20**ELSEIF**%20Using%20https%20and%20Issuer%20Is%20Not%20Trusted%20%E2%86%92%20**Suspicious**%20%3Cbr%3E%0A%20%20%20%20**Otherwise**%20%E2%86%92%20**Phishing**%0A%20%20%20%20%22%22%22)%2C%0A%0A%20%20%20%20%20%20%20%20%22domain_registration_length%22%3A%20mo.md(%22%22%22%0A%20%20%20%20%23%23%20**Domain%20Registration%20Length**%20%20%0A%20%20%20%20Based%20on%20the%20fact%20that%20a%20phishing%20website%20lives%20for%20a%20short%20period%20of%20time%2C%20we%20believe%20that%20trustworthy%20domains%20are%20regularly%20paid%20for%20several%20years%20in%20advance.%20In%20our%20dataset%2C%20we%20find%20that%20the%20longest%20fraudulent%20domains%20have%20been%20used%20for%20one%20year%20only.%20%0A%0A%20%20%20%20%23%23%23%20**Rule**%0A%20%20%20%20**IF**%20Domains%20Expires%20on%E2%89%A4%201%20years%20%20%E2%86%92%20**Pishing**%20%3Cbr%3E%0A%20%20%20%20**Otherwise**%20%E2%86%92%20**Legitimate**%0A%20%20%20%20%22%22%22)%2C%0A%0A%20%20%20%20%20%20%20%20%22favicon%22%3A%20mo.md(%22%22%22%0A%20%20%20%20%23%23%20**Favicon**%20%20%0A%20%20%20%20A%20favicon%20is%20a%20graphic%20image%20(icon)%20associated%20with%20a%20specific%20webpage.%20Many%20existing%20user%20agents%20such%20as%20graphical%20browsers%20and%20newsreaders%20show%20favicon%20as%20a%20visual%20reminder%20of%20the%20website%20identity%20in%20the%20address%20bar.%20If%20the%20favicon%20is%20loaded%20from%20a%20domain%20other%20than%20that%20shown%20in%20the%20address%20bar%2C%20then%20the%20webpage%20is%20likely%20to%20be%20considered%20a%20Phishing%20attempt.%20%0A%0A%20%20%20%20%23%23%23%20**Rule**%0A%20%20%20%20**IF**%20Favicon%20Loaded%20From%20External%20Domain%20%20%E2%86%92%20**Pishing**%20%3Cbr%3E%0A%20%20%20%20**Otherwise**%20%E2%86%92%20**Legitimate**%0A%20%20%20%20%22%22%22)%2C%0A%0A%20%20%20%20%20%20%20%20%22port%22%3A%20mo.md(%22%22%22%0A%20%20%20%20%23%23%20**Using%20Non-Standard%20Port**%20%20%0A%20%20%20%20This%20feature%20is%20useful%20in%20validating%20if%20a%20particular%20service%20(e.g.%20HTTP)%20is%20up%20or%20down%20on%20a%20specific%20server.%20In%20the%20aim%20of%20controlling%20intrusions%2C%20it%20is%20much%20better%20to%20merely%20open%20ports%20that%20you%20need.%20Several%20firewalls%2C%20Proxy%20and%20Network%20Address%20Translation%20(NAT)%20servers%20will%2C%20by%20default%2C%20block%20all%20or%20most%20of%20the%20ports%20and%20only%20open%20the%20ones%20selected.%20If%20all%20ports%20are%20open%2C%20phishers%20can%20run%20almost%20any%20service%20they%20want%20and%20as%20a%20result%2C%20user%20information%20is%20threatened.%20The%20most%20important%20ports%20and%20their%20preferred%20status%20are%20shown%20in%20Table%202.%0A%0A%0A%20%20%20%20%7C%20Port%20%7C%20Service%20%20%20%20%20%20%20%20%20%7C%20Meaning%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%7C%20Preferred%20Status%20%7C%0A%20%20%20%20%7C------%7C------------------%7C---------------------------------------------------------------------%7C------------------%7C%0A%20%20%20%20%7C%2021%20%20%20%7C%20FTP%20%20%20%20%20%20%20%20%20%20%20%20%20%20%7C%20Transfer%20files%20from%20one%20host%20to%20another%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%7C%20Close%20%20%20%20%20%20%20%20%20%20%20%20%7C%0A%20%20%20%20%7C%2022%20%20%20%7C%20SSH%20%20%20%20%20%20%20%20%20%20%20%20%20%20%7C%20Secure%20File%20Transfer%20Protocol%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%7C%20Close%20%20%20%20%20%20%20%20%20%20%20%20%7C%0A%20%20%20%20%7C%2023%20%20%20%7C%20Telnet%20%20%20%20%20%20%20%20%20%20%20%7C%20Provide%20a%20bidirectional%20interactive%20text-oriented%20communication%20%20%20%20%20%7C%20Close%20%20%20%20%20%20%20%20%20%20%20%20%7C%0A%20%20%20%20%7C%2080%20%20%20%7C%20HTTP%20%20%20%20%20%20%20%20%20%20%20%20%20%7C%20Hypertext%20Transfer%20Protocol%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%7C%20Open%20%20%20%20%20%20%20%20%20%20%20%20%20%7C%0A%20%20%20%20%7C%20443%20%20%7C%20HTTPS%20%20%20%20%20%20%20%20%20%20%20%20%7C%20Hypertext%20Transfer%20Protocol%20Secured%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%7C%20Open%20%20%20%20%20%20%20%20%20%20%20%20%20%7C%0A%20%20%20%20%7C%20445%20%20%7C%20SMB%20%20%20%20%20%20%20%20%20%20%20%20%20%20%7C%20Providing%20shared%20access%20to%20files%2C%20printers%2C%20serial%20ports%20%20%20%20%20%20%20%20%20%20%20%20%7C%20Close%20%20%20%20%20%20%20%20%20%20%20%20%7C%0A%20%20%20%20%7C%201433%20%7C%20MSSQL%20%20%20%20%20%20%20%20%20%20%20%20%7C%20Store%20and%20retrieve%20data%20as%20requested%20by%20other%20software%20applications%20%7C%20Close%20%20%20%20%20%20%20%20%20%20%20%20%7C%0A%20%20%20%20%7C%201521%20%7C%20ORACLE%20%20%20%20%20%20%20%20%20%20%20%7C%20Access%20Oracle%20database%20from%20web%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%7C%20Close%20%20%20%20%20%20%20%20%20%20%20%20%7C%0A%20%20%20%20%7C%203306%20%7C%20MySQL%20%20%20%20%20%20%20%20%20%20%20%20%7C%20Access%20MySQL%20database%20from%20web%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%7C%20Close%20%20%20%20%20%20%20%20%20%20%20%20%7C%0A%20%20%20%20%7C%203389%20%7C%20Remote%20Desktop%20%20%20%7C%20Allow%20remote%20access%20and%20remote%20collaboration%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%7C%20Close%20%20%20%20%20%20%20%20%20%20%20%20%7C%0A%0A%20%20%20%20%23%23%23%20**Rule**%0A%20%20%20%20**IF**%20%22Port%20%23%20is%20of%20the%20%22%20Preffered%20Status%20%20%E2%86%92%20**Pishing**%20%3Cbr%3E%0A%20%20%20%20**Otherwise**%20%E2%86%92%20**Legitimate**%0A%20%20%20%20%22%22%22)%2C%0A%0A%20%20%20%20%20%20%20%20%22https_token%22%3A%20mo.md(%22%22%22%0A%20%20%20%20%23%23%20**The%20Existence%20of%20%E2%80%9CHTTPS%E2%80%9D%20Token%20in%20the%20Domain%20Part%20of%20the%20URL**%20%20%0A%20%20%20%20The%20phishers%20may%20add%20the%20%E2%80%9CHTTPS%E2%80%9D%20token%20to%20the%20domain%20part%20of%20a%20URL%20in%20order%20to%20trick%20users.%20For%20example%2C%0A%20%20%20%20%60http%3A%2F%2Fhttps-www-paypal-it-webapps-mpp-home.soft-hair.com%2F%60%0A%0A%20%20%20%20%23%23%23%20**Rule**%0A%20%20%20%20**IF**%20%22Using%20%22%20HTTP%20Token%20in%20Domain%20Part%20of%20The%20URL%20%20%E2%86%92%20**Pishing**%20%3Cbr%3E%0A%20%20%20%20**Otherwise**%20%E2%86%92%20**Legitimate**%0A%20%20%20%20%22%22%22)%2C%0A%0A%20%20%20%20%20%20%20%20%22request_url%22%3A%20mo.md(%22%22%22%0A%20%20%20%20%23%23%20**Request%20URL**%20%20%0A%20%20%20%20Request%20URL%20examines%20whether%20the%20external%20objects%20contained%20within%20a%20webpage%20such%20as%20images%2C%20videos%20and%20sounds%20are%20loaded%20from%20another%20domain.%20In%20legitimate%20webpages%2C%20the%20webpage%20address%20and%20most%20of%20objects%20embedded%20within%20the%20webpage%20are%20sharing%20the%20same%20domain.%20%0A%0A%20%20%20%20%23%23%23%20**Rule**%0A%20%20%20%20**IF**%20%25%20of%20Request%20URL%20%3C22%25%20%E2%86%92%20**Legitimate**%20%3Cbr%3E%0A%20%20%20%20**ELSEIF**%20%25of%20Request%20URL%E2%89%A522%25%20and%2061%25%20%E2%86%92%20**Suspicious**%20%3Cbr%3E%0A%20%20%20%20**Otherwise**%20%E2%86%92%20feature%20%3D**Phishing**%0A%20%20%20%20%22%22%22)%2C%0A%0A%20%20%20%20%20%20%20%20%22url_of_anchor%22%3A%20mo.md(%22%22%22%0A%20%20%20%20%23%23%20**URL%20of%20Anchor**%20%20%0A%20%20%20%20An%20anchor%20is%20an%20element%20defined%20by%20the%20%60%3Ca%3E%60%20tag.%20This%20feature%20is%20treated%20exactly%20as%20%E2%80%9CRequest%20URL%E2%80%9D.%20However%2C%20for%20this%20feature%20we%20examine%3A%20%20%0A%20%20%20%20-%20If%20the%20%60%3Ca%3E%60%20tags%20and%20the%20website%20have%20different%20domain%20names.%20%20%0A%20%20%20%20-%20If%20the%20anchor%20does%20not%20link%20to%20any%20webpage%2C%20e.g.%3A%20%20%0A%20%20%20%20%20%20%60%3Ca%20href%3D%22%23%22%3E%60%2C%20%60%3Ca%20href%3D%22%23content%22%3E%60%2C%20%60%3Ca%20href%3D%22%23skip%22%3E%60%2C%20%60%3Ca%20href%3D%22JavaScript%3A%3Avoid(0)%22%3E%60%0A%0A%20%20%20%20%23%23%23%20**Rule**%0A%20%20%20%20**IF**%20%25%20of%20URL%20of%20Anchor%20%3C%2031%25%20%E2%86%92%20**Legitimate**%20%3Cbr%3E%0A%20%20%20%20**ELSEIF**%20%25%20of%20URL%20of%20Anchor%20%E2%89%A5%2031%25%20and%20%E2%89%A4%2067%25%20%E2%86%92%20**Suspicious**%20%3Cbr%3E%0A%20%20%20%20**Otherwise**%20%E2%86%92%20**Phishing**%0A%20%20%20%20%22%22%22)%2C%0A%0A%20%20%20%20%20%20%20%20%22links_in_tags%22%3A%20mo.md(%22%22%22%0A%20%20%20%20%23%23%20**Links%20in%20%60%3CMeta%3E%60%2C%20%60%3CScript%3E%60%20and%20%60%3CLink%3E%60%20tags**%20%20%0A%20%20%20%20Given%20that%20legitimate%20webpages%20commonly%20use%20%60%3CMeta%3E%60%20tags%20for%20metadata%2C%20%60%3CScript%3E%60%20tags%20for%20client-side%20scripts%2C%20and%20%60%3CLink%3E%60%20tags%20for%20loading%20other%20resources%2C%20these%20links%20are%20expected%20to%20share%20the%20same%20domain%20as%20the%20webpage.%0A%0A%20%20%20%20%23%23%23%20**Rule**%0A%20%20%20%20**IF**%20%25%20of%20these%20links%20%3C%2017%25%20%E2%86%92%20**Legitimate**%20%3Cbr%3E%0A%20%20%20%20**ELSEIF**%20%25%20of%20these%20links%20%E2%89%A5%2017%25%20and%20%E2%89%A4%2081%25%20%E2%86%92%20**Suspicious**%20%3Cbr%3E%0A%20%20%20%20**Otherwise**%20%E2%86%92%20**Phishing**%0A%20%20%20%20%22%22%22)%2C%0A%0A%20%20%20%20%20%20%20%20%22sfh%22%3A%20mo.md(%22%22%22%0A%20%20%20%20%23%23%20**Server%20Form%20Handler%20(SFH)**%20%20%0A%20%20%20%20SFHs%20that%20contain%20an%20empty%20string%20or%20%E2%80%9Cabout%3Ablank%E2%80%9D%20are%20considered%20doubtful%20because%20an%20action%20should%20be%20taken%20upon%20the%20submitted%20information.%20%20%0A%20%20%20%20If%20the%20domain%20name%20in%20the%20SFH%20differs%20from%20the%20domain%20name%20of%20the%20webpage%2C%20this%20is%20considered%20suspicious%20because%20submitted%20information%20is%20rarely%20handled%20by%20external%20domains.%0A%0A%20%20%20%20%23%23%23%20**Rule**%0A%20%20%20%20**IF**%20SFH%20is%20empty%20or%20%22about%3Ablank%22%20%E2%86%92%20**Phishing**%20%3Cbr%3E%0A%20%20%20%20**ELSEIF**%20SFH%20refers%20to%20a%20different%20domain%20%E2%86%92%20**Suspicious**%20%3Cbr%3E%0A%20%20%20%20**Otherwise**%20%E2%86%92%20**Legitimate**%0A%20%20%20%20%22%22%22)%2C%20%0A%0A%20%20%20%20%20%20%20%20%22submitting_to_email%22%3A%20mo.md(%22%22%22%0A%20%20%20%20%23%23%20**Submitting%20Information%20to%20Email**%20%20%0A%20%20%20%20A%20phisher%20may%20redirect%20the%20user%E2%80%99s%20personal%20information%20to%20an%20email%20account%20using%20server-side%20scripts%20such%20as%20%60mail()%60%20in%20PHP%20or%20client-side%20functions%20like%20%60mailto%3A%60.%0A%0A%20%20%20%20%23%23%23%20**Rule**%0A%20%20%20%20**IF**%20the%20form%20uses%20%60mail()%60%20or%20%60mailto%3A%60%20%E2%86%92%20**Phishing**%20%3Cbr%3E%0A%20%20%20%20**Otherwise**%20%E2%86%92%20**Legitimate**%0A%20%20%20%20%22%22%22)%2C%0A%0A%20%20%20%20%20%20%20%20%22abnormal_url%22%3A%20mo.md(%22%22%22%0A%20%20%20%20%23%23%20**Abnormal%20URL**%20%20%0A%20%20%20%20This%20feature%20is%20extracted%20from%20the%20WHOIS%20database.%20%20%0A%20%20%20%20For%20legitimate%20websites%2C%20the%20identity%20of%20the%20domain%20is%20usually%20part%20of%20the%20URL.%0A%0A%20%20%20%20%23%23%23%20**Rule**%0A%20%20%20%20**IF**%20the%20host%20name%20is%20not%20included%20in%20the%20URL%20%E2%86%92%20**Phishing**%20%3Cbr%3E%0A%20%20%20%20**Otherwise**%20%E2%86%92%20**Legitimate**%0A%20%20%20%20%22%22%22)%2C%0A%0A%20%20%20%20%20%20%20%20%22redirect%22%3A%20mo.md(%22%22%22%0A%20%20%20%20%23%23%20**Website%20Forwarding**%20%20%0A%20%20%20%20Phishing%20websites%20tend%20to%20redirect%20multiple%20times%2C%20whereas%20legitimate%20ones%20rarely%20redirect%20more%20than%20once.%0A%0A%20%20%20%20%23%23%23%20**Rule**%0A%20%20%20%20**IF**%20number%20of%20redirects%20%E2%89%A4%201%20%E2%86%92%20**Legitimate**%20%3Cbr%3E%0A%20%20%20%20**ELSEIF**%20number%20of%20redirects%20%E2%89%A5%202%20and%20%3C%204%20%E2%86%92%20**Suspicious**%20%3Cbr%3E%0A%20%20%20%20**Otherwise**%20%E2%86%92%20**Phishing**%0A%20%20%20%20%22%22%22)%2C%0A%0A%20%20%20%20%20%20%20%20%22on_mouseover%22%3A%20mo.md(%22%22%22%0A%20%20%20%20%23%23%20**Status%20Bar%20Customization**%20%20%0A%20%20%20%20Phishers%20may%20use%20JavaScript%20(such%20as%20%60onMouseOver%60)%20to%20display%20a%20fake%20URL%20in%20the%20status%20bar.%0A%0A%20%20%20%20%23%23%23%20**Rule**%0A%20%20%20%20**IF**%20onMouseOver%20changes%20the%20status%20bar%20%E2%86%92%20**Phishing**%20%3Cbr%3E%0A%20%20%20%20**Otherwise**%20%E2%86%92%20**Legitimate**%0A%20%20%20%20%22%22%22)%2C%0A%0A%20%20%20%20%20%20%20%20%22rightclick%22%3A%20mo.md(%22%22%22%0A%20%20%20%20%23%23%20**Disabling%20Right%20Click**%20%20%0A%20%20%20%20Phishers%20sometimes%20disable%20right-click%20using%20JavaScript%20(%60event.button%20%3D%3D%202%60)%20to%20prevent%20users%20from%20viewing%20page%20source.%0A%0A%20%20%20%20%23%23%23%20**Rule**%0A%20%20%20%20**IF**%20right%20click%20is%20disabled%20%E2%86%92%20**Phishing**%20%3Cbr%3E%0A%20%20%20%20**Otherwise**%20%E2%86%92%20**Legitimate**%0A%20%20%20%20%22%22%22)%2C%0A%0A%20%20%20%20%20%20%20%20%22popupwindow%22%3A%20mo.md(%22%22%22%0A%20%20%20%20%23%23%20**Using%20Pop-up%20Window**%20%20%0A%20%20%20%20Legitimate%20websites%20rarely%20ask%20for%20personal%20information%20through%20pop-up%20windows.%0A%0A%20%20%20%20%23%23%23%20**Rule**%0A%20%20%20%20**IF**%20pop-up%20window%20contains%20text%20fields%20%E2%86%92%20**Phishing**%20%3Cbr%3E%0A%20%20%20%20**Otherwise**%20%E2%86%92%20**Legitimate**%0A%20%20%20%20%22%22%22)%2C%0A%0A%20%20%20%20%20%20%20%20%22iframe%22%3A%20mo.md(%22%22%22%0A%20%20%20%20%23%23%20**IFrame%20Redirection**%20%20%0A%20%20%20%20Phishers%20may%20embed%20invisible%20iframes%20(%60frameBorder%3D0%60)%20to%20load%20malicious%20content.%0A%0A%20%20%20%20%23%23%23%20**Rule**%0A%20%20%20%20**IF**%20an%20iframe%20is%20used%20%E2%86%92%20**Phishing**%20%3Cbr%3E%0A%20%20%20%20**Otherwise**%20%E2%86%92%20**Legitimate**%0A%20%20%20%20%22%22%22)%2C%0A%0A%20%20%20%20%20%20%20%20%22age_of_domain%22%3A%20mo.md(%22%22%22%0A%20%20%20%20%23%23%20**Age%20of%20Domain**%20%20%0A%20%20%20%20Phishing%20websites%20tend%20to%20be%20very%20new%2C%20while%20legitimate%20domains%20are%20usually%20at%20least%206%20months%20old.%0A%0A%20%20%20%20%23%23%23%20**Rule**%0A%20%20%20%20**IF**%20age%20of%20domain%20%E2%89%A5%206%20months%20%E2%86%92%20**Legitimate**%20%3Cbr%3E%0A%20%20%20%20**Otherwise**%20%E2%86%92%20**Phishing**%0A%20%20%20%20%22%22%22)%2C%0A%0A%20%20%20%20%20%20%20%20%22dnsrecord%22%3A%20mo.md(%22%22%22%0A%20%20%20%20%23%23%20**DNS%20Record**%20%20%0A%20%20%20%20If%20the%20DNS%20record%20is%20empty%20or%20missing%2C%20the%20site%20is%20likely%20phishing.%0A%0A%20%20%20%20%23%23%23%20**Rule**%0A%20%20%20%20**IF**%20no%20DNS%20record%20exists%20%E2%86%92%20**Phishing**%20%3Cbr%3E%0A%20%20%20%20**Otherwise**%20%E2%86%92%20**Legitimate**%0A%20%20%20%20%22%22%22)%2C%0A%0A%20%20%20%20%20%20%20%20%22web_traffic%22%3A%20mo.md(%22%22%22%0A%20%20%20%20%23%23%20**Website%20Traffic**%20%20%0A%20%20%20%20This%20feature%20measures%20the%20popularity%20of%20the%20website%20based%20on%20visitor%20traffic%20(e.g.%2C%20Alexa%20ranking).%0A%0A%20%20%20%20%23%23%23%20**Rule**%0A%20%20%20%20**IF**%20website%20rank%20%3C%20100%2C000%20%E2%86%92%20**Legitimate**%20%3Cbr%3E%0A%20%20%20%20**ELSEIF**%20website%20rank%20%3E%20100%2C000%20%E2%86%92%20**Suspicious**%20%3Cbr%3E%0A%20%20%20%20**Otherwise**%20%E2%86%92%20**Phishing**%0A%20%20%20%20%22%22%22)%2C%0A%0A%20%20%20%20%20%20%20%20%22page_rank%22%3A%20mo.md(%22%22%22%0A%20%20%20%20%23%23%20**PageRank**%20%20%0A%20%20%20%20Phishing%20webpages%20usually%20have%20a%20PageRank%20close%20to%20zero.%0A%0A%20%20%20%20%23%23%23%20**Rule**%0A%20%20%20%20**IF**%20PageRank%20%3C%200.2%20%E2%86%92%20**Phishing**%20%3Cbr%3E%0A%20%20%20%20**Otherwise**%20%E2%86%92%20**Legitimate**%0A%20%20%20%20%22%22%22)%2C%0A%0A%20%20%20%20%20%20%20%20%22google_index%22%3A%20mo.md(%22%22%22%0A%20%20%20%20%23%23%20**Google%20Index**%20%20%0A%20%20%20%20This%20feature%20checks%20whether%20the%20webpage%20is%20indexed%20by%20Google.%0A%0A%20%20%20%20%23%23%23%20**Rule**%0A%20%20%20%20**IF**%20webpage%20is%20indexed%20by%20Google%20%E2%86%92%20**Legitimate**%20%3Cbr%3E%0A%20%20%20%20**Otherwise**%20%E2%86%92%20**Phishing**%0A%20%20%20%20%22%22%22)%2C%0A%0A%20%20%20%20%20%20%20%20%22links_pointing_to_page%22%3A%20mo.md(%22%22%22%0A%20%20%20%20%23%23%20**Number%20of%20Links%20Pointing%20to%20Page**%20%20%0A%20%20%20%20The%20number%20of%20external%20links%20pointing%20to%20a%20webpage%20is%20an%20indicator%20of%20legitimacy.%0A%0A%20%20%20%20%23%23%23%20**Rule**%0A%20%20%20%20**IF**%20number%20of%20links%20%3D%200%20%E2%86%92%20**Phishing**%20%3Cbr%3E%0A%20%20%20%20**ELSEIF**%20number%20of%20links%20%3E%200%20and%20%E2%89%A4%202%20%E2%86%92%20**Suspicious**%20%3Cbr%3E%0A%20%20%20%20**Otherwise**%20%E2%86%92%20**Legitimate**%0A%20%20%20%20%22%22%22)%2C%0A%0A%20%20%20%20%20%20%20%20%22statistical_report%22%3A%20mo.md(%22%22%22%0A%20%20%20%20%23%23%20**Statistical%20Reports%20Based%20Feature**%20%20%0A%20%20%20%20Statistical%20reports%20(e.g.%2C%20PhishTank%2C%20StopBadware)%20list%20top%20phishing%20domains%20and%20IP%20addresses.%0A%0A%20%20%20%20%23%23%23%20**Rule**%0A%20%20%20%20**IF**%20host%20belongs%20to%20top%20phishing%20IPs%20or%20domains%20%E2%86%92%20**Phishing**%20%3Cbr%3E%0A%20%20%20%20**Otherwise**%20%E2%86%92%20**Legitimate**%0A%20%20%20%20%22%22%22)%0A%20%20%20%20%7D%0A%20%20%20%20return%20(feature_long%2C)%0A%0A%0A%40app.cell(hide_code%3DTrue)%0Adef%20add_description(mo%2C%20pish_df)%3A%0A%20%20%20%20%23%203.%20Creating%20dropdown%20with%20columns%20names%0A%20%20%20%20columns%3Dpish_df.columns.tolist()%0A%20%20%20%20column_selector%20%3D%20mo.ui.dropdown(%0A%20%20%20%20%20%20%20%20options%3Dcolumns%5B%3A-1%5D%2C%0A%20%20%20%20%20%20%20%20value%3Dcolumns%5B0%5D%2C%0A%20%20%20%20%20%20%20%20label%20%3D%20%22Select%20the%20predictor%22%2C%0A%20%20%20%20%20%20%20%20full_width%3DTrue%0A%20%20%20%20)%0A%20%20%20%20return%20(column_selector%2C)%0A%0A%0A%40app.cell%0Adef%20_(column_selector%2C%20feature_long%2C%20mo)%3A%0A%20%20%20%20%23%204.%20Creating%20ui%20to%20check%20the%20column%20descriptions%0A%20%20%20%20des_long%20%3D%20feature_long%5Bcolumn_selector.value%5D%0A%0A%20%20%20%20column_description%20%3D%20mo.vstack(%5Bcolumn_selector%2C%20des_long%5D%2C%20gap%3D0.03)%0A%20%20%20%20return%20(column_description%2C)%0A%0A%0A%40app.cell%0Adef%20_(column_description)%3A%0A%20%20%20%20column_description%0A%20%20%20%20return%0A%0A%0A%40app.cell(hide_code%3DTrue)%0Adef%20_(alt%2C%20column_selector%2C%20pish_df)%3A%0A%20%20%20%20%23%205.%20Creating%20chart%20for%20feature%20distribution%0A%0A%20%20%20%20_aggregated%20%3D%20(%0A%20%20%20%20%20%20%20%20pish_df%0A%20%20%20%20%20%20%20%20.groupby(column_selector.value)%0A%20%20%20%20%20%20%20%20.size()%0A%20%20%20%20%20%20%20%20.reset_index(name%3D'count')%0A%20%20%20%20)%0A%0A%0A%20%20%20%20charti%20%3D%20(%0A%20%20%20%20%20%20%20%20alt.Chart(_aggregated)%20%20%23%20%E2%9C%85%20Correct%20-%20pass%20DataFrame%20directly%0A%20%20%20%20%20%20%20%20.mark_bar()%0A%20%20%20%20%20%20%20%20.encode(%0A%20%20%20%20%20%20%20%20%20%20%20%20x%3Dalt.X(field%3Dcolumn_selector.value%2C%20type%3D%22quantitative%22%2C%20bin%3DTrue%2C%20title%3Dcolumn_selector.value)%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20y%3Dalt.Y(aggregate%3D%22count%22%2C%20type%3D%22quantitative%22%2C%20title%3D%22Number%20of%20records%22)%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20tooltip%3D%5B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20alt.Tooltip(%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20column_selector.value%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20type%3D%22quantitative%22%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20bin%3DTrue%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20title%3Dcolumn_selector.value%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20)%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20alt.Tooltip(%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%22count()%22%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20type%3D%22quantitative%22%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20format%3D%22%2C.0f%22%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20title%3D%22Number%20of%20records%22%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20)%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20%5D%2C%0A%20%20%20%20%20%20%20%20).properties(width%3D%22container%22).configure_view(stroke%3DNone)%0A%20%20%20%20)%0A%20%20%20%20charti%0A%20%20%20%20return%0A%0A%0A%40app.cell(hide_code%3DTrue)%0Adef%20_()%3A%0A%20%20%20%20%23mo.md(text%3D%22%23%23%20Splitting%20the%20data%22)%0A%20%20%20%20return%0A%0A%0Aif%20__name__%20%3D%3D%20%22__main__%22%3A%0A%20%20%20%20app.run()%0A</marimo-code></head>
+  <body>
+    <div id="root"></div>
+    <!-- This is a portal for the data editor to render in -->
+    <div id="portal" data-testid="glide-portal" style="position: fixed; left: 0; top: 0; z-index: 9999"></div>
+    <script data-marimo="true">
+      window.__MARIMO_MOUNT_CONFIG__ = {
+            "filename": "notebook.py",
+            "mode": "read",
+            "version": "0.18.4",
+            "serverToken": "unused",
+            "config": {"ai": {"models": {"custom_models": [], "displayed_models": []}}, "completion": {"activate_on_typing": true, "copilot": false}, "diagnostics": {"sql_linter": true}, "display": {"cell_output": "below", "code_editor_font_size": 14, "dataframes": "rich", "default_table_max_columns": 50, "default_table_page_size": 10, "default_width": "medium", "reference_highlighting": false, "theme": "light"}, "formatting": {"line_length": 79}, "keymap": {"overrides": {}, "preset": "default"}, "language_servers": {"pylsp": {"enable_flake8": false, "enable_mypy": true, "enable_pydocstyle": false, "enable_pyflakes": false, "enable_pylint": false, "enable_ruff": true, "enabled": false}}, "mcp": {"mcpServers": {}, "presets": []}, "package_management": {"manager": "uv"}, "runtime": {"auto_instantiate": false, "auto_reload": "off", "default_sql_output": "auto", "on_cell_change": "autorun", "output_max_bytes": 8000000, "reactive_tests": true, "std_stream_max_bytes": 1000000, "watcher_on_save": "lazy"}, "save": {"autosave": "off", "autosave_delay": 1000, "format_on_save": false}, "server": {"browser": "default", "follow_symlink": false}, "snippets": {"custom_paths": [], "include_default_snippets": true}},
+            "configOverrides": {},
+            "appConfig": {"app_title": "Model_Reduction", "sql_output": "auto", "width": "medium"},
+            "view": {"showAppCode": false},
+            "notebook": null,
+            "session": null,
+            "runtimeConfig": null,
+        };
+    </script>
+  </body>
+</html>
