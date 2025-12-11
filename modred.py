@@ -1,3 +1,13 @@
+# /// script
+# requires-python = ">=3.10"
+# dependencies = [
+#     "altair==6.0.0",
+#     "numpy==2.2.6",
+#     "pandas==2.3.3",
+#     "scikit-learn==1.7.2",
+#     "statsmodels==0.14.6",
+# ]
+# ///
 import marimo
 
 __generated_with = "0.18.4"
@@ -47,7 +57,7 @@ def _(mo):
 @app.cell
 def _(mo, pd):
     @mo.cache()
-   def fetch_pish_data():
+    def fetch_pish_data():
         url = "https://raw.githubusercontent.com/datagus/ASDA2025/main/datasets/exercse_week9/pishing.csv"
         pish = pd.read_csv(url, encoding='latin-1')
         return pish
