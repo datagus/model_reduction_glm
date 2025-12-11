@@ -8,6 +8,7 @@
 #     "statsmodels==0.14.6",
 # ]
 # ///
+
 import marimo
 
 __generated_with = "0.18.4"
@@ -25,6 +26,13 @@ def _():
     import statsmodels.formula.api as smf
     from sklearn.model_selection import train_test_split
     return alt, mo, pd, sm, train_test_split
+
+
+@app.cell
+def _():
+    import warnings
+    warnings.filterwarnings('ignore', message='You passed a.*to `is_pandas_dataframe`')
+    return
 
 
 @app.cell(hide_code=True)
