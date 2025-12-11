@@ -1,14 +1,3 @@
-# /// script
-# requires-python = ">=3.10"
-# dependencies = [
-#     "altair==6.0.0",
-#     "numpy==2.2.6",
-#     "pandas==2.3.3",
-#     "scikit-learn==1.7.2",
-#     "statsmodels==0.14.6",
-# ]
-# ///
-
 import marimo
 
 __generated_with = "0.18.4"
@@ -22,11 +11,10 @@ def _():
     import altair as alt
     import numpy as np
 
-    from ucimlrepo import fetch_ucirepo
     import statsmodels.api as sm
     import statsmodels.formula.api as smf
     from sklearn.model_selection import train_test_split
-    return alt, mo, pd
+    return alt, mo, pd, sm, train_test_split
 
 
 @app.cell(hide_code=True)
@@ -59,7 +47,7 @@ def _(mo):
 @app.cell
 def _(mo, pd):
     @mo.cache()
-    def fetch_pish_data():
+   def fetch_pish_data():
         url = "https://raw.githubusercontent.com/datagus/ASDA2025/main/datasets/exercse_week9/pishing.csv"
         pish = pd.read_csv(url, encoding='latin-1')
         return pish
@@ -404,14 +392,12 @@ def _(column_selector, feature_long, mo):
     # 4. Creating ui to check the column descriptions
     des_long = feature_long[column_selector.value]
 
-    column_description = mo.vstack([column_selector, des_long], gap=0.03)
+    accordi = mo.accordion({
+        "Click to expand": des_long
+    })
+
+    column_description = mo.vstack([column_selector, accordi], gap=0.05)
     return (column_description,)
-
-
-@app.cell
-def _(column_description):
-    column_description
-    return
 
 
 @app.cell(hide_code=True)
@@ -448,13 +434,474 @@ def _(alt, column_selector, pish_df):
             ],
         ).properties(width="container").configure_view(stroke=None)
     )
-    charti
     return
 
 
 @app.cell(hide_code=True)
 def _():
     #mo.md(text="## Splitting the data")
+    return
+
+
+@app.cell(hide_code=True)
+def _(pish_df, train_test_split):
+    # 6. Splitting the data
+
+    #creating backup
+    df = pish_df.copy()
+
+    # Prepare features and target
+    X = pish_df.drop(columns=['result'])
+    y = pish_df['result']
+
+    # Convert target to binary (0 and 1) - assuming -1 is legitimate, 1 is phishing
+    y_binary = (y == 1).astype(int)
+
+    # Split the data (80% train, 20% test)
+    X_train, X_test, y_train, y_test = train_test_split(
+        X, y_binary, test_size=0.2, random_state=42, stratify=y_binary
+    )
+
+    print(f"Training set size: {len(X_train)}")
+    print(f"Test set size: {len(X_test)}")
+    print(f"Phishing rate in train: {y_train.mean():.2%}")
+    print(f"Phishing rate in test: {y_test.mean():.2%}")
+    return X, X_test, X_train, y_test, y_train
+
+
+@app.cell
+def _(X_train, alt):
+    # Calculate correlation matrix
+    _correlation_matrix = X_train.corr()
+
+    # Convert to long format for Altair
+    _corr_long = _correlation_matrix.reset_index().melt(
+        id_vars='index',
+        var_name='variable2',
+        value_name='correlation'
+    )
+    _corr_long.columns = ['variable1', 'variable2', 'correlation']
+
+    # Create Altair heatmap
+    correlation_heatmap = (
+        alt.Chart(_corr_long)
+        .mark_rect()
+        .encode(
+            x=alt.X('variable1:N', title='Feature', axis=alt.Axis(labelAngle=-45)),
+            y=alt.Y('variable2:N', title='Feature'),
+            color=alt.Color(
+                'correlation:Q',
+                scale=alt.Scale(scheme='redblue', domain=[-1, 1], reverse=True),
+                title='Correlation'
+            ),
+            tooltip=[
+                alt.Tooltip('variable1:N', title='Feature 1'),
+                alt.Tooltip('variable2:N', title='Feature 2'),
+                alt.Tooltip('correlation:Q', format='.3f', title='Correlation')
+            ]
+        )
+        .properties(
+            width=600,
+            height=600,
+            title='Correlation Matrix of Phishing Website Features'
+        )
+        .configure_view(stroke=None)
+        .configure_axis(labelFontSize=10)
+    ).interactive()
+    return (correlation_heatmap,)
+
+
+@app.cell
+def _(correlation_heatmap, mo):
+    heatmap_accordion = mo.accordion({"Expand to see the correlation heatmap": correlation_heatmap})
+    return (heatmap_accordion,)
+
+
+@app.cell
+def _(X_train, pd):
+    from statsmodels.stats.outliers_influence import variance_inflation_factor
+
+    # Calculate the Variance Inflation Factor for each feature
+    _vif_data = pd.DataFrame()
+    _vif_data["Feature"] = X_train.columns
+    _vif_data["VIF"] = [
+        variance_inflation_factor(X_train.values, i) 
+        for i in range(X_train.shape[1])
+    ]
+
+    # Sort by VIF value (descending)
+    _vif_data = _vif_data.sort_values('VIF', ascending=False).reset_index(drop=True)
+
+    # Add interpretation column
+    _vif_data['Multicollinearity'] = _vif_data['VIF'].apply(
+        lambda x: 'High (>10)' if x > 10 else ('Moderate (5-10)' if x > 5 else 'Low (<5)')
+    )
+    return (variance_inflation_factor,)
+
+
+@app.cell
+def _(X_train, alt, pd, y_train):
+    from sklearn.feature_selection import mutual_info_classif
+
+    # Calculate mutual information with target
+    _mi_scores = mutual_info_classif(X_train, y_train, random_state=42)
+
+    _mi_df = pd.DataFrame({
+        'Feature': X_train.columns,
+        'MI_Score': _mi_scores
+    }).sort_values('MI_Score', ascending=False)
+
+    # Create bar chart
+    mi_chart = (
+        alt.Chart(_mi_df)
+        .mark_bar()
+        .encode(
+            x=alt.X('MI_Score:Q', title='Mutual Information Score'),
+            y=alt.Y('Feature:N', sort='-x', title='Feature'),
+            color=alt.Color('MI_Score:Q', scale=alt.Scale(scheme='viridis'), legend=None),
+            tooltip=[
+                alt.Tooltip('Feature:N'),
+                alt.Tooltip('MI_Score:Q', format='.3f', title='MI Score')
+            ]
+        )
+        .properties(
+            width='container',
+            height=600,
+            title='Mutual Information: Feature Importance with Target'
+        )
+        .configure_view(stroke=None)
+    )
+    return (mi_chart,)
+
+
+@app.cell
+def _(mi_chart, mo):
+    mutual_accordion= mo.accordion({"Expand to see the Mutual Information Score": mi_chart})
+    return (mutual_accordion,)
+
+
+@app.cell
+def _(X_train, alt, pd, variance_inflation_factor):
+    # Plotting the Variance Inflation Factor
+    _vif_data_chart = pd.DataFrame()
+    _vif_data_chart["Feature"] = X_train.columns
+    _vif_data_chart["VIF"] = [
+        variance_inflation_factor(X_train.values, i) 
+        for i in range(X_train.shape[1])
+    ]
+    _vif_data_chart = _vif_data_chart.sort_values('VIF', ascending=False)
+
+    # Create color coding based on VIF thresholds
+    _vif_data_chart['Severity'] = _vif_data_chart['VIF'].apply(
+        lambda x: 'High (>10)' if x > 10 else ('Moderate (5-10)' if x > 5 else 'Low (<5)')
+    )
+
+    # Create bar chart
+    vif_chart = (
+        alt.Chart(_vif_data_chart)
+        .mark_bar()
+        .encode(
+            x=alt.X('VIF:Q', title='Variance Inflation Factor'),
+            y=alt.Y('Feature:N', sort='-x', title='Feature'),
+            color=alt.Color(
+                'Severity:N',
+                scale=alt.Scale(
+                    domain=['Low (<5)', 'Moderate (5-10)', 'High (>10)'],
+                    range=['#2ecc71', '#f39c12', '#e74c3c']
+                ),
+                title='Multicollinearity Level'
+            ),
+            tooltip=[
+                alt.Tooltip('Feature:N', title='Feature'),
+                alt.Tooltip('VIF:Q', format='.2f', title='VIF'),
+                alt.Tooltip('Severity:N', title='Level')
+            ]
+        )
+        .properties(
+            width='container',
+            height=600,
+            title='Variance Inflation Factor (VIF) by Feature'
+        )
+        .configure_view(stroke=None)
+    )
+    return (vif_chart,)
+
+
+@app.cell
+def _(mo, vif_chart):
+    vif_accordion = mo.accordion({"Expand to see the Variance Inflation Factor Barplot": vif_chart})
+    return (vif_accordion,)
+
+
+@app.cell
+def _():
+    ## mo.md("""## Running model""")
+    return
+
+
+@app.cell
+def _(X, mo):
+    # 7. Create checkboxes for variable selection
+    predictor_names = X.columns.tolist()
+    predictor_selector = mo.ui.array([
+        mo.ui.checkbox(label=var, value=True) for var in predictor_names
+    ])
+
+    predictors = mo.vstack([
+        mo.md("### Select Variables for Model"),
+        mo.hstack(
+            [predictor_selector[i] for i in range(0, len(predictor_selector))],
+            widths="equal",
+            wrap=True
+        )
+    ])
+    return predictor_names, predictor_selector, predictors
+
+
+@app.cell
+def _(X_train, predictor_names, predictor_selector, sm, y_train):
+    # 8. Creating function to fit model
+    coli = [predictor_names[j] for j in range(0,len(predictor_selector)) if predictor_selector[j].value]
+
+    def glm_model2(coli):
+        X_train2 = X_train[coli]
+        X_train_const = sm.add_constant(X_train2)
+
+        model = sm.GLM(
+        y_train, 
+        X_train_const, 
+        family=sm.families.Binomial()
+        )
+        result = model.fit()
+        return result
+
+    result2 = glm_model2(coli)
+    return coli, result2
+
+
+@app.cell
+def _(pd, result2):
+    # 9. Creating model statistics
+    model_stats = pd.DataFrame({
+                'Metric': ['Deviance', 'Null Deviance', 'Deviance Explained', 'Log-Likelihood', 'AIC'],
+                'Value': [
+                    round(result2.deviance,2),
+                    round(result2.null_deviance,2),
+                    1 - (result2.deviance / result2.null_deviance),
+                    round(result2.llf,2),
+                    round(result2.aic,2)
+                ]
+            })
+    return (model_stats,)
+
+
+@app.cell
+def _():
+    #mo.md("""## Running Predictions""")
+    return
+
+
+@app.cell
+def _(X_test, coli, pd, result2, sm, y_test):
+    # 10. Making predictions on test set
+    X_test_const = sm.add_constant(X_test[coli])
+
+    # Get predicted probabilities
+    y_pred_proba = result2.predict(X_test_const)
+
+    # Convert to binary predictions (threshold = 0.5)
+    y_pred_binary = (y_pred_proba >= 0.5).astype(int)
+
+    # Create comparison dataframe
+    glm_predictions = pd.DataFrame({
+        'Actual': y_test.values,
+        'Predicted_Probability': y_pred_proba,
+        'Predicted_Class': y_pred_binary,
+        'Correct': (y_test.values == y_pred_binary)
+    })
+    return glm_predictions, y_pred_binary, y_pred_proba
+
+
+@app.cell
+def _(pd, y_pred_binary, y_pred_proba, y_test):
+    # 11. Calculating model performance metrics
+    from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, roc_auc_score, confusion_matrix
+
+    glm_metrics = pd.DataFrame({
+        'Metric': ['Accuracy', 'Precision', 'Recall', 'F1-Score', 'ROC-AUC'],
+        'Value': [
+            accuracy_score(y_test, y_pred_binary),
+            precision_score(y_test, y_pred_binary),
+            recall_score(y_test, y_pred_binary),
+            f1_score(y_test, y_pred_binary),
+            roc_auc_score(y_test, y_pred_proba)
+        ]
+    })
+    return confusion_matrix, glm_metrics
+
+
+@app.cell
+def _(confusion_matrix, pd, y_pred_binary, y_test):
+    # 12. Creating confusion matrix visualization
+    conf_matrix = confusion_matrix(y_test, y_pred_binary)
+
+    confusion_df = pd.DataFrame({
+        'Predicted_Legitimate': [conf_matrix[0, 0], conf_matrix[1, 0]],
+        'Predicted_Phishing': [conf_matrix[0, 1], conf_matrix[1, 1]]
+    }, index=['Actual_Legitimate', 'Actual_Phishing'])
+    return (confusion_df,)
+
+
+@app.cell
+def _(mo):
+    mo.md("""
+    ## **Feature Selection**
+    """)
+    return
+
+
+@app.cell
+def _(heatmap_accordion, mo):
+    mo.vstack([mo.md("### Correlation Heatmap"),heatmap_accordion])
+    return
+
+
+@app.cell
+def _(mo, vif_accordion):
+    mo.vstack([mo.md("### Variance Inflation Factor"),vif_accordion])
+    return
+
+
+@app.cell
+def _(mo, mutual_accordion):
+    mo.vstack([mo.md("### Mutual Information Classification"),mutual_accordion])
+    return
+
+
+@app.cell
+def _(mo):
+    mo.md("""
+    ## **Dashboard**
+    """)
+    return
+
+
+@app.cell
+def _(confusion_df, glm_metrics, mo, model_stats):
+    metrics = mo.hstack([model_stats,glm_metrics,confusion_df], align="center", wrap=True, widths=[2,2,5])
+    return (metrics,)
+
+
+@app.cell
+def _(alt, glm_predictions):
+    # Create logistic curve visualization
+    # Sort predictions by probability for smooth curve
+    _sorted_predictions = glm_predictions.sort_values('Predicted_Probability').reset_index(drop=True)
+    _sorted_predictions['observation'] = range(len(_sorted_predictions))
+
+    # Create the logistic curve chart
+    logistic_chart = (
+        alt.Chart(_sorted_predictions)
+        .mark_line(color='red', strokeWidth=2)
+        .encode(
+            x=alt.X('observation:Q', title='Observation (sorted by probability)'),
+            y=alt.Y('Predicted_Probability:Q', title='Probability', scale=alt.Scale(domain=[0, 1])),
+            tooltip=[
+                alt.Tooltip('observation:Q', title='Observation'),
+                alt.Tooltip('Predicted_Probability:Q', format='.3f', title='Predicted Probability')
+            ]
+        )
+    )
+
+    # Overlay actual values as points
+    actual_points = (
+        alt.Chart(_sorted_predictions)
+        .mark_circle(size=20, opacity=0.5)
+        .encode(
+            x=alt.X('observation:Q'),
+            y=alt.Y('Actual:Q', title='Actual Value'),
+            color=alt.Color('Actual:N',
+                           scale=alt.Scale(domain=[0, 1], range=['#1f77b4', '#ff7f0e']),
+                           legend=alt.Legend(title='Actual Class',
+                                            labelExpr="datum.value == 0 ? 'Pishing (0)' : 'Legitimate (1)'")),
+            tooltip=[
+                alt.Tooltip('observation:Q', title='Observation'),
+                alt.Tooltip('Actual:N', title='Actual Class'),
+                alt.Tooltip('Predicted_Probability:Q', format='.3f', title='Predicted Probability')
+            ]
+        )
+    )
+
+    # Combine both layers
+    logis = (logistic_chart + actual_points).properties(
+        width='container',
+        height=400,
+        title='Logistic Regression: Predicted Probabilities (Red Curve) vs Actual Values (Points)'
+    ).configure_view(stroke=None)
+    return (logis,)
+
+
+@app.cell
+def _(X_test, alt, column_selector, y_pred_proba, y_test):
+    # Alternative: Plot against a specific predictor variable
+    # Choose a predictor to visualize (e.g., 'url_length')
+    predictor_var = column_selector.value
+
+    # Combine test data with predictions
+    _test_with_pred = X_test[[predictor_var]].copy()
+    _test_with_pred['Actual'] = y_test.values
+    _test_with_pred['Predicted_Probability'] = y_pred_proba
+
+    # Aggregate to show clearer pattern
+    _aggregated_by_predictor = (
+        _test_with_pred
+        .groupby(predictor_var)
+        .agg({'Predicted_Probability': 'mean', 'Actual': 'mean'})
+        .reset_index()
+    )
+
+    # Create logistic curve by predictor
+    predictor_logistic = (
+        alt.Chart(_aggregated_by_predictor)
+        .mark_line(color='red', strokeWidth=3)
+        .encode(
+            x=alt.X(f'{predictor_var}:Q', title=predictor_var),
+            y=alt.Y('Predicted_Probability:Q', title='Mean Predicted Probability', scale=alt.Scale(domain=[0, 1])),
+            tooltip=[
+                alt.Tooltip(f'{predictor_var}:Q'),
+                alt.Tooltip('Predicted_Probability:Q', format='.3f', title='Mean Pred. Probability')
+            ]
+        )
+    )
+
+    # Overlay actual mean values
+    actual_line = (
+        alt.Chart(_aggregated_by_predictor)
+        .mark_line(color='blue', strokeWidth=2, strokeDash=[5, 5])
+        .encode(
+            x=alt.X(f'{predictor_var}:Q'),
+            y=alt.Y('Actual:Q', title='Mean Actual Value'),
+            tooltip=[
+                alt.Tooltip(f'{predictor_var}:Q'),
+                alt.Tooltip('Actual:Q', format='.3f', title='Mean Actual')
+            ]
+        )
+    )
+
+    pred_log = (predictor_logistic + actual_line).properties(
+        width='container',
+        height=400,
+        title=f'Logistic Function: Predicted (Red) vs Actual (Blue Dashed) by {predictor_var}'
+    ).configure_view(stroke=None)
+    return (pred_log,)
+
+
+@app.cell
+def _(column_description, logis, metrics, mo, pred_log, predictors):
+    mo.hstack([
+        mo.vstack([predictors,metrics]),
+        mo.vstack([logis, column_description,pred_log])
+    ])
     return
 
 
